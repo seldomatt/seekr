@@ -6,6 +6,10 @@ careers.stackoverflow.com/jobs?searchTerm=#{searchterm}+#{searchterm}&location=#
 
 links - a .title abbrev[href]
 
+Index pagination 
+
+div .pagination a (class is "selected" for current page, else class has no name)
+
 
 Parse Job Page
 
