@@ -1,9 +1,13 @@
 require 'open-uri'
 require 'nokogiri'
 require 'sqlite3'
+require 'FileUtils'
 
-# Create the database
 
+
+if File.exist?("stackseekr.db")
+	true
+else
 db = SQLite3::Database.new( "stackseekr.db" )
 sql = <<SQL
 CREATE table stackjobs
@@ -21,11 +25,9 @@ SQL
 
 db.execute_batch( sql )
 
-# Take user input and parse resulting web pages (get URLS for job pages)
+end
 
-# def format_userinput(input)
-# 	downcase.strip.split.join("+")
-# end
+# Take user input and parse resulting web pages (get URLS for job pages)
 
 puts "Enter a search term:"
 searchterm = gets.downcase.strip.split.join("+")
@@ -34,13 +36,14 @@ searchterm = gets.downcase.strip.split.join("+")
 puts "Where:"
 location = gets.downcase.strip.split.join("+")
 
-puts "Within how may miles:"
+puts "Within how many miles:"
 range = gets.strip.to_i
 
 stackurl = "http://careers.stackoverflow.com"
 indexurl = stackurl + "/jobs?searchTerm=#{searchterm}&location=#{location}&range=#{range}"
 
 
+# puts multiple page search result into array page_links
 
 page_links = []
 
@@ -51,13 +54,23 @@ end
 
 page_links = page_links.uniq!
 
-puts page_links.inspect
+# iterates over page_links array to parse links to job postings
 
-# page_links.each do |page|
-# 	doc = Nokogiri::HTML(open(page))
-# 	doc.
+job_links = []
 
+page_links.each do |page|
+	doc = Nokogiri::HTML(open(page))
+	doc.css("a.title").map do |job|
+		job_links << stackurl + job["href"]
+	end
+end
 
+# iterates over job postings to populate database
+
+job_links.each do |job|
+	doc = Nokogiri::HTML(open(job))
+
+	job_title = doc.css
 
 
 
