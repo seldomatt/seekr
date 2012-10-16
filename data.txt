@@ -1,0 +1,25 @@
+Parsing careers.stackoverflow - http://careers.stackoverflow.com/jobs?searchTerm=%22ruby+on+rails%22&location=new+york+city&range=20
+
+Parse Index Page
+
+careers.stackoverflow.com/jobs?searchTerm=#{searchterm}+#{searchterm}&location=#{location}+#{location}&range=#{range}
+
+links - a .title abbrev[href]
+
+
+Parse Job Page
+
+Data:
+
+Job Title - h1 .title
+Company - a .employer 
+Location - span .location , delete everything after ()
+Terms - span. location, delete everything before ()
+Tags - a .post-tag
+Description - div .description p (first)
+Skills & Requirements - div .description p (second)
+Company Description - div .description p (third)
+
+
+
+
