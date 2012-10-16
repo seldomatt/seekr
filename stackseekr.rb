@@ -4,10 +4,9 @@ require 'sqlite3'
 require 'FileUtils'
 
 
+FileUtils.rm("stackseekr.db") if File.exists?("stackseekr.db")
 
-if File.exist?("stackseekr.db")
-	true
-else
+
 db = SQLite3::Database.new( "stackseekr.db" )
 sql = <<SQL
 CREATE table stackjobs
@@ -15,7 +14,7 @@ CREATE table stackjobs
 job_title TEXT,
 company TEXT,
 location TEXT,
-location_terms TEXT,
+terms TEXT,
 tags TEXT,
 description TEXT,
 skills_and_reqs TEXT,
@@ -23,9 +22,9 @@ company_desc TEXT
 );
 SQL
 
-db.execute_batch( sql )
+db.execute sql
 
-end
+
 
 # Take user input and parse resulting web pages (get URLS for job pages)
 
@@ -65,14 +64,43 @@ page_links.each do |page|
 	end
 end
 
+
 # iterates over job postings to populate database
 
 job_links.each do |job|
 	doc = Nokogiri::HTML(open(job))
 
-	job_title = doc.css
+	job_title = doc.css('a.title').text
+	company = doc.css('a.employer').text
+	location_and_terms  = doc.css('span.location').text
+		if location_and_terms.include?("(")
+			location = location_and_terms.split("(")[0].strip
+			terms = location_and_terms.split("(")[1].delete(")")
+		else 
+			location = location_and_terms.strip
+		end
+	description = doc.css('div.description')[0].text.strip
+	skills_and_reqs = if doc.css('div.description')[1]
+										doc.css('div.description')[1].text.strip
+										else
+										" - "
+										end
+	company_desc = 	if doc.css('div.description')[2]
+									doc.css('div.description')[2].text.strip
+									else
+									" - "
+									end
 
 
+	db.execute("INSERT INTO stackjobs (job_title, company, location, terms, description, skills_and_reqs, company_desc) VALUES (?,?,?,?,?,?,?)", 
+							job_title, 
+							company, 
+							location, 
+							terms, 
+							description,
+							skills_and_reqs,
+							company_desc)
 
+end
 
 
