@@ -33,3 +33,18 @@ describe Company do
     Company.all.should include(company)
   end
 end
+
+# describe Company do 
+#   it "should be able to find a company" do 
+#     company = Company.new
+#     company.name = "Bloomberg"
+#     Company.find("Bloomberg").should include(company)
+#   end
+# end
+
+describe Company do 
+  it "should be able to find a company from the db" do 
+    company = Company.find("Kabam")
+    company.name.should == "Kabam"
+  end
+end

@@ -48,3 +48,31 @@ describe Job do
 		company.jobs.should include(job)
 	end
 end 
+
+describe Job do 
+	it "should be able to retrieve all instances of itself" do 
+		job2 = Job.new
+		Job.all.should include(job2)
+	end
+end
+
+describe Job do 
+	it "should be able to find a job" do 
+		job = Job.new
+		job.title = "Ruby Jr Developer"
+		Job.find("Ruby Jr Developer").should include(job)
+	end
+end
+
+
+
+
+
+
+
+
+
+
+
+
+

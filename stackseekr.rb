@@ -4,25 +4,24 @@ require 'sqlite3'
 require 'FileUtils'
 
 
-FileUtils.rm("stackseekr.db") if File.exists?("stackseekr.db")
+# FileUtils.rm("stackseekr.db") if File.exists?("stackseekr.db")
 
 
-db = SQLite3::Database.new( "stackseekr.db" )
+@db = SQLite3::Database.new( "stackseekr.db" )
 sql = <<SQL
 CREATE table stackjobs
 ( id INTEGER PRIMARY KEY, 
 job_title TEXT,
-company TEXT,
+company_name TEXT,
 location TEXT,
 terms TEXT,
-tags TEXT,
 description TEXT,
 skills_and_reqs TEXT,
 company_desc TEXT
 );
 SQL
 
-db.execute sql
+@db.execute sql
 
 
 
@@ -38,22 +37,10 @@ location = gets.downcase.strip.split.join("+")
 puts "Within how many miles:"
 range = gets.strip.to_i
 
+
+
 stackurl = "http://careers.stackoverflow.com"
 indexurl = stackurl + "/jobs?searchTerm=#{searchterm}&location=#{location}&range=#{range}&pg=1"
-
-
-# puts multiple page search result into array page_links
-
-# page_links = []
-
-# doc = Nokogiri::HTML(open(indexurl))
-# doc.css("div.pagination a").map do |pagelink|
-# 	page_links << stackurl + pagelink["href"]
-# end
-
-# page_links = page_links.uniq!
-
-# iterates over page_links array to parse links to job postings
 
 job_links = []
 
@@ -73,13 +60,6 @@ while is_there_a_next_page == true
 	end
 end
 
-# page_links.each do |page|
-# 	doc = Nokogiri::HTML(open(page))
-# 	doc.css("a.title").map do |job|
-# 		job_links << stackurl + job["href"]
-# 	end
-# end
-
 
 # iterates over job postings to populate database
 
@@ -87,7 +67,7 @@ job_links.each do |job|
 	doc = Nokogiri::HTML(open(job))
 
 	job_title = doc.css('a.title').text
-	company = doc.css('a.employer').text
+	company_name = doc.css('a.employer').text
 	location_and_terms  = doc.css('span.location').text
 		if location_and_terms.include?("(")
 			location = location_and_terms.split("(")[0].strip
@@ -108,9 +88,9 @@ job_links.each do |job|
 									end
 
 
-	db.execute("INSERT INTO stackjobs (job_title, company, location, terms, description, skills_and_reqs, company_desc) VALUES (?,?,?,?,?,?,?)", 
+	@db.execute("INSERT INTO stackjobs (job_title, company_name, location, terms, description, skills_and_reqs, company_desc) VALUES (?,?,?,?,?,?,?)", 
 							job_title, 
-							company, 
+							company_name, 
 							location, 
 							terms, 
 							description,
