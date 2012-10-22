@@ -118,5 +118,3 @@ job_links.each do |job|
 							company_desc)
 
 end
-
-

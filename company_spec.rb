@@ -26,3 +26,10 @@ describe Company do
     company.jobs.should == []
   end
 end
+
+describe Company do
+  it "should be able to retrieve all the companies" do
+    company = Company.new
+    Company.all.should include(company)
+  end
+end

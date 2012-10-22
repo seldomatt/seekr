@@ -3,8 +3,12 @@ class Company
 
   def initialize
     @jobs = []
+    self.class.all << self
   end
 
+  def self.all
+  	@@company ||= []
+  end
 
 
 end
