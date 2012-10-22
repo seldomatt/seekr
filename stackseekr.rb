@@ -39,30 +39,46 @@ puts "Within how many miles:"
 range = gets.strip.to_i
 
 stackurl = "http://careers.stackoverflow.com"
-indexurl = stackurl + "/jobs?searchTerm=#{searchterm}&location=#{location}&range=#{range}"
+indexurl = stackurl + "/jobs?searchTerm=#{searchterm}&location=#{location}&range=#{range}&pg=1"
 
 
 # puts multiple page search result into array page_links
 
-page_links = []
+# page_links = []
 
-doc = Nokogiri::HTML(open(indexurl))
-doc.css("div.pagination a").map do |pagelink|
-	page_links << stackurl + pagelink["href"]
-end
+# doc = Nokogiri::HTML(open(indexurl))
+# doc.css("div.pagination a").map do |pagelink|
+# 	page_links << stackurl + pagelink["href"]
+# end
 
-page_links = page_links.uniq!
+# page_links = page_links.uniq!
 
 # iterates over page_links array to parse links to job postings
 
 job_links = []
 
-page_links.each do |page|
-	doc = Nokogiri::HTML(open(page))
-	doc.css("a.title").map do |job|
-		job_links << stackurl + job["href"]
+is_there_a_next_page = true
+page = 1
+while is_there_a_next_page == true
+	uri = "http://careers.stackoverflow.com/jobs?searchTerm=#{searchterm}&location=#{location}&range=#{range}&pg=#{page}"
+	doc = Nokogiri::HTML(open(uri))
+	this_pages_links = doc.css('a.title').map do |obj|
+	"http://careers.stackoverflow.com#{obj["href"]}"
+	end
+	job_links.concat(this_pages_links)
+	page += 1
+
+	if this_pages_links.empty?
+		is_there_a_next_page = false
 	end
 end
+
+# page_links.each do |page|
+# 	doc = Nokogiri::HTML(open(page))
+# 	doc.css("a.title").map do |job|
+# 		job_links << stackurl + job["href"]
+# 	end
+# end
 
 
 # iterates over job postings to populate database
