@@ -18,11 +18,14 @@ class Company
     @db = SQLite3::Database.open( "stackseekr.db" )
     @db.results_as_hash = true
     result = @db.execute("SELECT * FROM stackjobs WHERE company = '#{companyname}'")[0]
-    puts result.inspect
-    result.each do |k,v|
-      next if k == "id" || k == "job_title"
-      company.send("#{k}=", v)
-    end
+    company.name = result["company"]
+    company.location = result["location"]
+    company.description = result["description"]
+    # puts result.inspect
+    # result.each do |k,v|
+    #   next if k == "id" || k == "job_title"
+    #   company.send("#{k}=", v)
+    # end
     company
   end
 

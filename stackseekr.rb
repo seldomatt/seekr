@@ -7,21 +7,21 @@ require 'FileUtils'
 # FileUtils.rm("stackseekr.db") if File.exists?("stackseekr.db")
 
 
-@db = SQLite3::Database.new( "stackseekr.db" )
-sql = <<SQL
-CREATE table stackjobs
-( id INTEGER PRIMARY KEY, 
-job_title TEXT,
-company_name TEXT,
-location TEXT,
-terms TEXT,
-description TEXT,
-skills_and_reqs TEXT,
-company_desc TEXT
-);
-SQL
+# @db = SQLite3::Database.new( "stackseekr.db" )
+# sql = <<SQL
+# CREATE table stackjobs
+# ( id INTEGER PRIMARY KEY, 
+# job_title TEXT,
+# company_name TEXT,
+# location TEXT,
+# terms TEXT,
+# description TEXT,
+# skills_and_reqs TEXT,
+# company_desc TEXT
+# );
+# SQL
 
-@db.execute sql
+# @db.execute sql
 
 
 
