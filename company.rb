@@ -1,9 +1,9 @@
-require_relative 'stackseekr'
+# require_relative 'stackseekr'
 require 'sqlite3'
 
 class Company 
 
-  CompanyAttributes = ["companyname", "location", "companydescription", "jobs"]
+  CompanyAttributes = ["name", "location", "description", "jobs"]
 
   CompanyAttributes.each do |att|
     attr_accessor att.to_sym

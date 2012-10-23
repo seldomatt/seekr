@@ -1,7 +1,7 @@
 class Job
 	attr_reader :company
 
-  JobAttributes = ["jobtitle", "terms", "jobdescription", "skills"]
+  JobAttributes = ["title", "terms", "description", "skills"]
 
   JobAttributes.each do |att|
     attr_accessor att.to_sym
@@ -30,5 +30,15 @@ class Job
     end
     job
   end
-	
 end
+
+
+
+
+# def save(object)
+#   self.execute("INSERT INTO tablename (")
+#     object.title, 
+#     object.company.name, 
+#     object.location
+
+# end
