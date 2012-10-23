@@ -1,8 +1,13 @@
 require_relative 'stackseekr'
 require 'sqlite3'
 
-class Company
-  attr_accessor :name, :location, :description, :jobs
+class Company 
+
+  CompanyAttributes = ["companyname", "location", "companydescription", "jobs"]
+
+  CompanyAttributes.each do |att|
+    attr_accessor att.to_sym
+  end
 
   def initialize
     @jobs = []
@@ -15,19 +20,26 @@ class Company
 
   def self.find(companyname)
     company = Company.new
-    @db = SQLite3::Database.open( "stackseekr.db" )
-    @db.results_as_hash = true
-    result = @db.execute("SELECT * FROM stackjobs WHERE company = '#{companyname}'")[0]
-    company.name = result["company"]
-    company.location = result["location"]
-    company.description = result["description"]
-    # puts result.inspect
-    # result.each do |k,v|
-    #   next if k == "id" || k == "job_title"
-    #   company.send("#{k}=", v)
-    # end
+    db = SQLite3::Database.open( "stackseekr.db" )
+    db.results_as_hash = true
+    result = db.execute("SELECT * FROM stackjobs WHERE companyname = '#{companyname}'")[0]
+    result.each do |k,v|
+    company.send("#{k}=", v) if CompanyAttributes.include?(k)
+    end
     company
   end
+
+  def self.find_jobs(companyname)
+    db = SQLite3::Database.open( "stackseekr.db" )
+    db.results_as_hash = true
+    result = db.execute("SELECT ")
+  end
+
+
+
+  
+
+  
 
 
 end

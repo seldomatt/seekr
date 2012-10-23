@@ -3,9 +3,9 @@ require_relative 'company'
 describe Company do 
   before(:each) do 
     @company = Company.new
-    @company.name = "CM Retail Management, Inc."
+    @company.companyname = "CM Retail Management, Inc."
     @company.location = "Reno, NV"
-    @company.description = "Shitty Company"
+    @company.companydescription = "Shitty Company"
   end
 
 
@@ -17,9 +17,9 @@ end
 
 describe Company do 
   it "has a name, location, desc, and jobs" do 
-    @company.name.should == "CM Retail Management, Inc."
+    @company.companyname.should == "CM Retail Management, Inc."
     @company.location.should == "Reno, NV"
-    @company.description.should == "Shitty Company"
+    @company.companydescription.should == "Shitty Company"
   end
 end
 
@@ -37,8 +37,16 @@ end
 
 describe Company do 
   it "should be able to find a company from the db" do 
-    company = Company.find("Kabam")
-    company.name.should == "Kabam"
+    company = Company.find("ThoughtWorks")
+    company.companyname.should == "ThoughtWorks"
+  end
+end
+
+describe Company do 
+  it "should be able to find a companies jobs" do 
+    jobs = Company.find_jobs("ThoughtWorks")
+    job = jobs.select {|j| j.jobtitle == "seeking bright, passionate, principal developers"}.first
+    job.should be_true
   end
 end
 end

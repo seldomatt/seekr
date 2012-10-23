@@ -1,6 +1,11 @@
 class Job
-	attr_accessor :title, :terms, :description, :skills
 	attr_reader :company
+
+  JobAttributes = ["jobtitle", "terms", "jobdescription", "skills"]
+
+  JobAttributes.each do |att|
+    attr_accessor att.to_sym
+  end
 
 	def initialize
     self.class.all << self
@@ -16,7 +21,14 @@ class Job
   end
 
   def self.find(jobtitle)
-    self.all.select {|j| j.title == jobtitle}
+    job = Job.new
+    db = SQLite3::Database.open( "stackseekr.db" )
+    db.results_as_hash = true
+    result = db.execute("SELECT * FROM stackjobs WHERE jobtitle = '#{jobtitle}'")[0]
+    result.each do |k,v|
+      job.send("#{k}=", v) if JobAttributes.include?(k)
+    end
+    job
   end
 	
 end

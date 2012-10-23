@@ -12,13 +12,13 @@ end
 describe Job do
 	it "has a title, terms, description, skills" do
 		job = Job.new
-		job.title = "Ruby Job"
+		job.jobtitle = "Ruby Job"
 		job.terms = "relocation offered"
-		job.description = "Job description: Ruby job"
+		job.jobdescription = "Job description: Ruby job"
 		job.skills = "Requirements: 5+ years experience."
-		job.title.should == "Ruby Job"
+		job.jobtitle.should == "Ruby Job"
 		job.terms.should == "relocation offered"
-		job.description.should == "Job description: Ruby job"
+		job.jobdescription.should == "Job description: Ruby job"
 		job.skills.should == "Requirements: 5+ years experience."
 	end
 end
@@ -58,9 +58,8 @@ end
 
 describe Job do 
 	it "should be able to find a job" do 
-		job = Job.new
-		job.title = "Ruby Jr Developer"
-		Job.find("Ruby Jr Developer").should include(job)
+		job = Job.find("Ruby (Sinatra) Developer")
+		job.jobtitle.should == "Ruby (Sinatra) Developer"
 	end
 end
 
